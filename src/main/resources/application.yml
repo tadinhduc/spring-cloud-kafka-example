@@ -1,0 +1,35 @@
+spring:
+  cloud:
+    function:
+      definition: consumerTest
+    stream:
+      default-binder: kafka
+      kafka:
+        binder:
+          brokers:
+            - localhost:9092
+        bindings:
+          input:
+            consumer:
+              # Dead Letter Queue Configuration
+              # https://cloud.spring.io/spring-cloud-static/spring-cloud-stream-binder-kafka/3.0.6.RELEASE/reference/html/spring-cloud-stream-binder-kafka.html#kafka-consumer-properties
+              enableDlq: true
+              dlqName: dlq-topic
+              dlqPartitions: 1
+      bindings:
+        consumerTest-in-0:
+          destination: consumerTest
+          group: group1
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      dialect: org.hibernate.dialect.MySQLDialect
+      format_sql: true
+    generate-ddl: true
+    database-platform: org.hibernate.dialect.MySQLDialect
+  datasource:
+    url: jdbc:mysql://localhost:3306/test?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true
+    username: root
+    password: root
