@@ -7,19 +7,31 @@ spring:
       kafka:
         binder:
           brokers:
-            - localhost:9092
+            - 192.168.10.103:9092
+          configuration:
+            partition.assignment.strategy: org.apache.kafka.clients.consumer.RoundRobinAssignor
+          auto-add-partitions: true
         bindings:
-          input:
+          consumerTest-in-0:
             consumer:
               # Dead Letter Queue Configuration
               # https://cloud.spring.io/spring-cloud-static/spring-cloud-stream-binder-kafka/3.0.6.RELEASE/reference/html/spring-cloud-stream-binder-kafka.html#kafka-consumer-properties
               enableDlq: true
-              dlqName: dlq-topic
+              dlqName: topic1-dlq
               dlqPartitions: 1
+
       bindings:
+        consumerTest-out-0:
+          destination: topic1
+          producer:
+            partition-count: 10
         consumerTest-in-0:
-          destination: consumerTest
+          destination: topic1
           group: group1
+          consumer:
+            partitioned: true
+            concurrency: 7
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -30,6 +42,6 @@ spring:
     generate-ddl: true
     database-platform: org.hibernate.dialect.MySQLDialect
   datasource:
-    url: jdbc:mysql://localhost:3306/test?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true
+    url: jdbc:mysql://192.168.10.103:3306/test?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
     username: root
     password: root

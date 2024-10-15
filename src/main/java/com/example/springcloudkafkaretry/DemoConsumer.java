@@ -20,7 +20,7 @@ public class DemoConsumer {
     public Consumer<String> consumerTest() {
         return o -> {
             log.info("Consumed {}", o);
-            throw new ProcessingException();
+//            throw new ProcessingException();
         };
     }
 

@@ -1,0 +1,12 @@
+version: '3'
+services:
+  springboot-app:
+    image: myapp:latest
+    container_name: springboot-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS:  192.168.10.103:9092

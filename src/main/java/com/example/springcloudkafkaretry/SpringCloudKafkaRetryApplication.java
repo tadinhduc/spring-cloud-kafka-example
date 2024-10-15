@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.stream.function.StreamBridge;
 
 @SpringBootApplication
 @Slf4j
 public class SpringCloudKafkaRetryApplication implements CommandLineRunner {
   @Autowired AccountService accountService;
+  @Autowired StreamBridge streamBridge;
 
   public static void main(String[] args) {
     SpringApplication.run(SpringCloudKafkaRetryApplication.class, args);
@@ -19,6 +21,10 @@ public class SpringCloudKafkaRetryApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
+
+    for (int i = 0; i < 1000; i++) {
+      boolean sent = streamBridge.send("consumerTest-out-0", "test" + i);
+    }
     CompletableFuture.supplyAsync(
         () -> {
           makeFundTransfer();
